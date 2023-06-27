@@ -1,3 +1,5 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Movies.API.Data;
 
 namespace Movies.API
 {
@@ -6,6 +8,8 @@ namespace Movies.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddDbContext<MoviesAPIContext>(options =>
+                options.UseInMemoryDatabase("Movies"));
 
             // Add services to the container.
 
@@ -15,6 +19,9 @@ namespace Movies.API
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+
+            // seed database
+            SeedDatabase(app);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -31,6 +38,14 @@ namespace Movies.API
             app.MapControllers();
 
             app.Run();
+        }
+
+        public static void SeedDatabase(WebApplication application)
+        {
+            using var scope = application.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var moviesContext = services.GetRequiredService<MoviesAPIContext>();
+            MoviesContextSeed.SeedAsync(moviesContext);
         }
     }
 }

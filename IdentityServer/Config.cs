@@ -1,5 +1,6 @@
 ﻿using IdentityServer4.Models;
 using IdentityServer4.Test;
+using System.Net.Sockets;
 
 namespace IdentityServer
 {
@@ -12,11 +13,21 @@ namespace IdentityServer
                 {
                     ClientId = "movieClient",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    // RedirectUris = { urlClient },
+                    // PostLogoutRedirectUris = { urlClient },
+                    // AllowedCorsOrigins = { urlClient },
+                    AbsoluteRefreshTokenLifetime = 60,
+                    RefreshTokenExpiration = TokenExpiration.Absolute,
+                    SlidingRefreshTokenLifetime = 60,
+                    AlwaysSendClientClaims = true,
                     ClientSecrets =
                     {
                         new Secret("movie06282023APIsecret".Sha256())
                     },
-                    AllowedScopes = {"movieAPI"}
+                    AllowedScopes = {"movieAPI"},
+                    AccessTokenLifetime = 60,
+                    IdentityTokenLifetime = 60,
                 }
             };
         public static IEnumerable<ApiScope> ApiScopes =>

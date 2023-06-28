@@ -6,21 +6,38 @@ namespace IdentityServer
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // configure controllers and views for IdentityServer4 QuicStart UI
+            builder.Services.AddControllersWithViews();
+
             // IdentityServer
             builder.Services.AddIdentityServer()
                 .AddInMemoryClients(Config.Clients)
-                //.AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryIdentityResources(Config.IdentityResources)
                 //.AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
-                //.AddTestUsers(Config.TestUsers)
+                .AddTestUsers(Config.TestUsers)
                 .AddDeveloperSigningCredential();
+
+            builder.Services.AddAuthentication("indentity_server_cookie_06282023")
+                .AddCookie("indentity_server_cookie_06282023", options =>
+                {
+                    options.Cookie.Name = "indentity_server_cookie";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                    options.SlidingExpiration = true;
+                });
 
             var app = builder.Build();
 
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseIdentityServer();
 
-            app.MapGet("/", () => "Hello World!");
+            app.UseAuthorization();
+            app.UseAuthentication();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

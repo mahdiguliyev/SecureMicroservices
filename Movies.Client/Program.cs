@@ -1,4 +1,6 @@
-﻿using Movies.Client.ApiServices;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Movies.Client.ApiServices;
 namespace Movies.Client
 {
     public class Program
@@ -11,6 +13,30 @@ namespace Movies.Client
 
             // configure services with DI
             builder.Services.AddScoped<IMovieApiService, MovieApiService>();
+
+            // authentication with OpenID Connect
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.Cookie.Name = "movie_client_cookie";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                options.SlidingExpiration = true;
+            })
+            .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
+            {
+                options.Authority = "https://localhost:5005";
+                options.ClientId = "moviesMVClient";
+                options.ClientSecret = "movie06282023MVCsecret";
+                options.ResponseType = "code";
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.SaveTokens = true;
+                options.GetClaimsFromUserInfoEndpoint = true;
+            });
 
             var app = builder.Build();
 
@@ -27,6 +53,7 @@ namespace Movies.Client
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

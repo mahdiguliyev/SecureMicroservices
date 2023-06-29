@@ -1,9 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Movies.Client.ApiServices;
 using Movies.Client.Models;
 
 namespace Movies.Client.Controllers
 {
+    [Authorize]
     public class MoviesController : Controller
     {
         private readonly IMovieApiService _movieApiService;
@@ -157,6 +162,12 @@ namespace Movies.Client.Controllers
 
             //await _context.SaveChangesAsync();
             //return RedirectToAction(nameof(Index));
+        }
+
+        public async Task Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
         }
 
         private bool MovieExists(int id)

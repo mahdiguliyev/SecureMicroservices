@@ -28,7 +28,7 @@ namespace Movies.API
             // activate Authorization
             builder.Services.AddAuthorization(options =>
             {
-                options.AddPolicy("MovieClient06282023Policy", policy => policy.RequireClaim("client_id", "movieClient"));
+                options.AddPolicy("MovieClient06282023Policy", policy => policy.RequireClaim("client_id", "movieClient", "moviesMVClient")); // added also 'moviesMVClient' for Hybrid Flow
             });
 
             // Add services to the container.

@@ -35,9 +35,11 @@ namespace Movies.Client
                 options.Authority = "https://localhost:5005";
                 options.ClientId = "moviesMVClient";
                 options.ClientSecret = "movie06282023MVCsecret";
-                options.ResponseType = "code";
+                options.ResponseType = "code id_token"; // changed from 'code' to 'code id_token'
                 options.Scope.Add("openid");
                 options.Scope.Add("profile");
+                options.Scope.Add("movieAPI"); // added additional scope for the Movie API. When the Movie MVC Client login via OpenID Connect,
+                                               // then Movie API also can use the same toke with Movie MVC Client
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
             });
@@ -60,13 +62,18 @@ namespace Movies.Client
                 client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             });
 
-            builder.Services.AddSingleton(new ClientCredentialsTokenRequest
-            {
-                Address = "https://localhost:5005/connect/token",
-                ClientId = "movieClient",
-                ClientSecret = "movie06282023APIsecret",
-                Scope = "movieAPI"
-            });
+            // For Hybrid flow below configuration should be added. We will get token via HttpContextAccess, when user login
+            builder.Services.AddHttpContextAccessor();
+
+            // ClientCredentialsTokenRequest is for Authorization Code Flow
+
+            //builder.Services.AddSingleton(new ClientCredentialsTokenRequest
+            //{
+            //    Address = "https://localhost:5005/connect/token",
+            //    ClientId = "movieClient",
+            //    ClientSecret = "movie06282023APIsecret",
+            //    Scope = "movieAPI"
+            //});
 
             var app = builder.Build();
 

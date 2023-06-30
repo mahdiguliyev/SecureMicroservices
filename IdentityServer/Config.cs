@@ -40,7 +40,8 @@ namespace IdentityServer
                     SlidingRefreshTokenLifetime = 60,
                     AccessTokenLifetime = 60,
                     IdentityTokenLifetime = 60,
-                    AllowedGrantTypes = GrantTypes.Code,
+                    AllowedGrantTypes = GrantTypes.Hybrid, // change from Code to Hybrid
+                    RequirePkce = false, // additional config for Hybrid flow
                     AllowRememberConsent = false,
                     RedirectUris = new List<string>()
                     {
@@ -57,7 +58,8 @@ namespace IdentityServer
                     AllowedScopes = new List<string>()
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "movieAPI" // also added the scope for Movie API to consume the same token with the Movie MVC Client when login via OpenID Connect
                     }
                 }
             };

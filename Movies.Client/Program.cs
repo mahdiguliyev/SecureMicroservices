@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.Net.Http.Headers;
 using Movies.Client.ApiServices;
+using Movies.Client.HttpHandlers;
+
 namespace Movies.Client
 {
     public class Program
@@ -36,6 +40,32 @@ namespace Movies.Client
                 options.Scope.Add("profile");
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
+            });
+
+            // create a HttpClient for IHttpClientFactory to consume Movie API
+            builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+
+            builder.Services.AddHttpClient("MovieAPIClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5001/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            }).AddHttpMessageHandler<AuthenticationDelegatingHandler>();
+
+            // create a HttpClient used for accessing the IDP
+            builder.Services.AddHttpClient("IDPClient", client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:5005/");
+                client.DefaultRequestHeaders.Clear();
+                client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            });
+
+            builder.Services.AddSingleton(new ClientCredentialsTokenRequest
+            {
+                Address = "https://localhost:5005/connect/token",
+                ClientId = "movieClient",
+                ClientSecret = "movie06282023APIsecret",
+                Scope = "movieAPI"
             });
 
             var app = builder.Build();

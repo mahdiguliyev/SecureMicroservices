@@ -25,23 +25,9 @@ namespace Movies.Client.Controllers
         }
 
         // GET: Movies/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            return View();
-
-            //if (id == null || _context.Movie == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //var movie = await _context.Movie
-            //    .FirstOrDefaultAsync(m => m.Id == id);
-            //if (movie == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //return View(movie);
+            return View(await _movieApiService.GetMovieById(id));
         }
 
         // GET: Movies/Create
@@ -57,15 +43,8 @@ namespace Movies.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Genre,Rating,ReleaseDate,ImageUrl,Owner")] Movie movie)
         {
-            return View();
-
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(movie);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            //return View(movie);
+            var createdMovie = await _movieApiService.CreateMovie(movie);
+            return RedirectToAction("Details", new {Id = createdMovie.Id});
         }
 
         // GET: Movies/Edit/5

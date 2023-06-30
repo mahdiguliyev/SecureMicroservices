@@ -26,7 +26,8 @@ namespace Movies.API.Controllers
           {
               return NotFound();
           }
-            return await _context.Movie.ToListAsync();
+
+          return await _context.Movie.ToListAsync();
         }
 
         // GET: api/Movies/5

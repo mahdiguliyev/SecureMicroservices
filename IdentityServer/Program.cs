@@ -1,3 +1,5 @@
+using IdentityServerHost.Quickstart.UI;
+
 namespace IdentityServer
 {
     public class Program
@@ -15,7 +17,7 @@ namespace IdentityServer
                 .AddInMemoryIdentityResources(Config.IdentityResources)
                 //.AddInMemoryApiResources(Config.ApiResources)
                 .AddInMemoryApiScopes(Config.ApiScopes)
-                .AddTestUsers(Config.TestUsers)
+                .AddTestUsers(TestUsers.Users) // changes from "Config.TestUsers" to "TestUsers.Users" for Claim based authorization in Hybrid flow
                 .AddDeveloperSigningCredential();
 
             builder.Services.AddAuthentication("indentity_server_cookie_06282023")

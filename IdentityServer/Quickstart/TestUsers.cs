@@ -30,24 +30,25 @@ namespace IdentityServerHost.Quickstart.UI
                     new TestUser
                     {
                         SubjectId = "818727",
-                        Username = "alice",
-                        Password = "alice",
+                        Username = "mahdiguliyev",
+                        Password = "Mahdi135@",
                         Claims =
                         {
-                            new Claim(JwtClaimTypes.Name, "Alice Smith"),
-                            new Claim(JwtClaimTypes.GivenName, "Alice"),
-                            new Claim(JwtClaimTypes.FamilyName, "Smith"),
-                            new Claim(JwtClaimTypes.Email, "AliceSmith@email.com"),
+                            new Claim(JwtClaimTypes.Name, "Mahdi Guliyev"),
+                            new Claim(JwtClaimTypes.GivenName, "Mahdi"),
+                            new Claim(JwtClaimTypes.FamilyName, "Guliyev"),
+                            new Claim(JwtClaimTypes.Email, "mahdiguliyev@email.com"),
                             new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
-                            new Claim(JwtClaimTypes.WebSite, "http://alice.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
+                            new Claim(JwtClaimTypes.WebSite, "http://mahdiguliyev.com"),
+                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json),
+                            new Claim(JwtClaimTypes.Role, "admin") // added for Claim based authorization in Hybrid flow
                         }
                     },
                     new TestUser
                     {
                         SubjectId = "88421113",
                         Username = "bob",
-                        Password = "bob",
+                        Password = "Sadiq135@",
                         Claims =
                         {
                             new Claim(JwtClaimTypes.Name, "Bob Smith"),
@@ -56,7 +57,8 @@ namespace IdentityServerHost.Quickstart.UI
                             new Claim(JwtClaimTypes.Email, "BobSmith@email.com"),
                             new Claim(JwtClaimTypes.EmailVerified, "true", ClaimValueTypes.Boolean),
                             new Claim(JwtClaimTypes.WebSite, "http://bob.com"),
-                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json)
+                            new Claim(JwtClaimTypes.Address, JsonSerializer.Serialize(address), IdentityServerConstants.ClaimValueTypes.Json),
+                            new Claim (JwtClaimTypes.Role, "user") // added for Claim based authorization in Hybrid flow
                         }
                     }
                 };

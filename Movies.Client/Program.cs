@@ -1,6 +1,9 @@
-﻿using IdentityModel.Client;
+﻿using IdentityModel;
+using IdentityModel.Client;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Movies.Client.ApiServices;
 using Movies.Client.HttpHandlers;
@@ -36,12 +39,26 @@ namespace Movies.Client
                 options.ClientId = "moviesMVClient";
                 options.ClientSecret = "movie06282023MVCsecret";
                 options.ResponseType = "code id_token"; // changed from 'code' to 'code id_token'
-                options.Scope.Add("openid");
-                options.Scope.Add("profile");
+                //options.Scope.Add("openid");
+                //options.Scope.Add("profile");
+
+                options.Scope.Add("address"); // added for Claim based authorization in Hybrid flow
+                options.Scope.Add("email"); // added for Claim based authorization in Hybrid flow
+
                 options.Scope.Add("movieAPI"); // added additional scope for the Movie API. When the Movie MVC Client login via OpenID Connect,
                                                // then Movie API also can use the same toke with Movie MVC Client
+
+                options.Scope.Add("roles"); // added for Claim based authorization in Hybrid flow
+                options.ClaimActions.MapUniqueJsonKey("role", "role"); // added for Claim based authorization in Hybrid flow
+
                 options.SaveTokens = true;
                 options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.TokenValidationParameters = new TokenValidationParameters // added for Claim based authorization in Hybrid flow
+                {
+                    NameClaimType = JwtClaimTypes.GivenName,
+                    RoleClaimType = JwtClaimTypes.Role,
+                };
             });
 
             // create a HttpClient for IHttpClientFactory to consume Movie API

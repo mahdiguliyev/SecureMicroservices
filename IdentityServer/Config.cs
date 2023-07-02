@@ -59,7 +59,10 @@ namespace IdentityServer
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "movieAPI" // also added the scope for Movie API to consume the same token with the Movie MVC Client when login via OpenID Connect
+                        IdentityServerConstants.StandardScopes.Address, // added for Claim based authorization in Hybrid flow
+                        IdentityServerConstants.StandardScopes.Email, // added for Claim based authorization in Hybrid flow
+                        "movieAPI", // also added the scope for Movie API to consume the same token with the Movie MVC Client when login via OpenID Connect
+                        "roles", // added for Claim based authorization in Hybrid flow
                     }
                 }
             };
@@ -73,6 +76,9 @@ namespace IdentityServer
         {
             new IdentityResources.OpenId(),
             new IdentityResources.Profile(),
+            new IdentityResources.Address(), // added for Claim based authorization in Hybrid flow
+            new IdentityResources.Email(), // added for Claim based authorization in Hybrid flow
+            new IdentityResource("roles", "Your role(s)", new List<string>(){"role"}) // added for Claim based authorization in Hybrid flow
         };
         public static List<TestUser> TestUsers => new List<TestUser>
         {

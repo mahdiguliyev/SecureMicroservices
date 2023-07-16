@@ -62,11 +62,11 @@ namespace Movies.Client
             });
 
             // create a HttpClient for IHttpClientFactory to consume Movie API
-            builder.Services.AddTransient<AuthenticationDelegatingHandler>();
+            builder.Services.AddTransient<AuthenticationDelegatingHandler>(); // add the token for request flow
 
             builder.Services.AddHttpClient("MovieAPIClient", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:5001/");
+                client.BaseAddress = new Uri("https://localhost:5010/"); // changed from 'https://localhost:5001/' to 'https://localhost:5010/' for ApiGateway
                 client.DefaultRequestHeaders.Clear();
                 client.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
             }).AddHttpMessageHandler<AuthenticationDelegatingHandler>();

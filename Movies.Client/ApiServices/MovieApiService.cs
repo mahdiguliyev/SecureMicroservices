@@ -21,7 +21,7 @@ namespace Movies.Client.ApiServices
         {
             var httpClient = _httpClientFactory.CreateClient("MovieAPIClient");
 
-            var request = new HttpRequestMessage(HttpMethod.Post, $"/api/movies");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"/movies"); // changed to ApiGateway URL
             request.Content = JsonContent.Create(movie);
 
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
@@ -42,7 +42,7 @@ namespace Movies.Client.ApiServices
         {
             var httpClient = _httpClientFactory.CreateClient("MovieAPIClient");
 
-            var request = new HttpRequestMessage(HttpMethod.Get, $"/api/movies/{id}");
+            var request = new HttpRequestMessage(HttpMethod.Get, $"/movie/{id}"); // changed to ApiGateway URL
 
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
@@ -59,7 +59,7 @@ namespace Movies.Client.ApiServices
 
             var httpClient = _httpClientFactory.CreateClient("MovieAPIClient");
 
-            var request = new HttpRequestMessage(HttpMethod.Get, "/api/movies");
+            var request = new HttpRequestMessage(HttpMethod.Get, "/movies"); // changed to ApiGateway URL
 
             var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead).ConfigureAwait(false);
             response.EnsureSuccessStatusCode();
